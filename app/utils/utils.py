@@ -2,12 +2,12 @@ from datetime import datetime
 import pytz
 import numpy as np
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 import uuid
-
 from datetime import datetime
 from fastapi import HTTPException
 
-def validate_request(payload):
+def validate_request(payload: dict):
     """
     Validates the incoming data submission request.
     
@@ -31,7 +31,8 @@ def validate_request(payload):
     if not all(isinstance(x, (int, float)) for x in payload['data']):
         raise HTTPException(status_code=400, detail="All elements in the data list must be numbers.")
 
-def transform_timestamp(timestamp_str, from_tz='US/Eastern', to_tz='UTC', time_format='%Y-%m-%dT%H:%M:%S%z'):
+def transform_timestamp(timestamp_str: str, from_tz: str='US/Eastern', to_tz: str='UTC',
+                        time_format:str ='%Y-%m-%dT%H:%M:%S%z'):
     """
     Transforms a timestamp from one timezone to another.
     
@@ -57,7 +58,7 @@ def transform_timestamp(timestamp_str, from_tz='US/Eastern', to_tz='UTC', time_f
     # Return the converted timestamp
     return converted_timestamp
 
-def process_data(payload):
+def process_data(payload: dict):
     """
     Processes the input data payload by transforming the timestamp to UTC
     and calculating the mean and standard deviation of the data array.
@@ -76,7 +77,7 @@ def process_data(payload):
     
     return {'request_id': str(uuid.uuid4()), 'timestamp': timestamp_utc, 'mean': mean, 'std_dev': std_dev}
 
-def insert_record(session, model, data):
+def insert_record(session: Session, model: object, data: dict):
     """
     Inserts a record into the specified table/model.
     
@@ -99,7 +100,7 @@ def insert_record(session, model, data):
         print(f"Error inserting record: {e}")
         return None
 
-def is_uuid_valid(uuid_to_test: str, version=4):
+def is_uuid_valid(uuid_to_test: str, version: int=4):
     """
     Validates whether uuid is valid or not
     

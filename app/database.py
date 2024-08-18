@@ -11,7 +11,9 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def get_db_session():
-    """Provides a transactional scope around a series of operations."""
+    """
+    Provides a transactional scope around a series of operations.
+    """
     session = SessionLocal()
     try:
         yield session

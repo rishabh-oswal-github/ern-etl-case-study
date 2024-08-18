@@ -10,6 +10,22 @@ router = APIRouter()
 
 @router.post("/ingest/", response_model=IngestDataResponse)
 def ingest_data(payload: DataPayload, db: Session = Depends(get_db_session)):
+    """
+    Ingests data, processes it, and stores the processed data in the database.
+
+    This endpoint accepts a payload of data, validates the payload, processes it to calculate 
+    statistical metrics, and then stores the processed data in the database. The function 
+    returns a response containing a unique request ID that can be used to fetch the 
+    statistics later.
+
+    Args:
+        payload (DataPayload): The input data payload containing the data to be processed.
+        db (Session, optional): The database session used to interact with the PostgreSQL 
+        database. Defaults to the session provided by the `get_db_session` dependency.
+
+    Returns:
+        IngestDataResponse: A response object containing the request ID and a success message.
+    """
     validate_request(payload.model_dump())
     processed_data = process_data(payload=payload.model_dump())
     insert_record(session=db, model=DataRecord, data=processed_data)
