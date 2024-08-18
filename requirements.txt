@@ -1,0 +1,10 @@
+fastapi[standard]==0.112.1
+uvicorn==0.30.5
+numpy==2.0.1
+pytz==2024.1
+SQLAlchemy==2.0.32
+psycopg2-binary==2.9.9
+requests==2.32.3
+pytest==8.3.2
+coverage==7.6.1
+PyYAML==6.0.1
